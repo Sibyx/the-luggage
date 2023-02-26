@@ -1,0 +1,9 @@
+.idea/
+venv/
+.github/
+.editorconfig
+.env
+.env.example
+.flake8
+.gitignore
+tmp/

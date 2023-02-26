@@ -1,0 +1,18 @@
+[Unit]
+Description=The Luggage
+Wants=network-online.target
+After=network-online.target docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop -t 5 the-luggage
+ExecStartPre=-/usr/bin/docker rm the-luggage
+ExecStartPre=-/usr/bin/docker pull ghcr.io/sibyx/the-luggage:master
+ExecStart=/usr/bin/docker run -p 9000:9000 -v ./logs:/var/log/ --env BASE_URL= --env ALLOWED_HOSTS= --env DATABASE_HOST= --env DATABASE_NAME= --env DATABASE_PASSWORD= --env DATABASE_PORT= --env DATABASE_USER= --env DJANGO_SETTINGS_MODULE=luggage.settings.production --env SECRET_KEY= --name the-luggage  --add-host=host.docker.internal:host-gateway ghcr.io/sibyx/the-luggage:master
+ExecStop=/usr/bin/docker stop -t 5 the-luggage
+ExecStopPost=-/usr/bin/docker rm the-luggage
+
+[Install]
+WantedBy=multi-user.target
